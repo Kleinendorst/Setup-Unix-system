@@ -24,7 +24,7 @@ insert_in_file_after_line() {
 target_git_clone_path=~/.repos
 mkdir -p $target_git_clone_path
 
-bash_prompt_home="$target_git_clone_path/bash-git-prompt"
+bash_prompt_home=$target_git_clone_path/bash-git-prompt
 if [[ ! -d $bash_prompt_home ]]; then
 	echo 'Installing Git bash...'
 	# "--depth 1" specified in the official installation instructions
@@ -44,3 +44,25 @@ echo
 
 echo 'Script finished and installation is ready, run the following command to activate:'
 echo 'source ~/.bashrc'
+
+# Check whether this is a Red Hat system
+if [[ -f /etc/redhat-release ]]; then
+	echo 'Installing tmux...'
+	yum install -y tmux
+else
+	echo "Couldn\'t detect distribution, tmux might not be installed and this might be the cause"
+	echo "for failures in the script..."
+fi
+
+tmux_powerline_theme_home=$target_git_clone_path/tmux_powerline
+if [[ ! -d $tmux_powerline_theme_home ]]; then
+	echo 'Installing Tmux powerline theme...'
+	git clone https://github.com/wfxr/tmux-power.git $tmux_powerline_theme_home
+	echo
+fi
+
+touch ~/.tmux.conf
+cat > ~/.tmux.conf << EOF
+set -g @tmux_power_theme 'redwine'
+run-shell "$tmux_powerline_theme_home/tmux-power.tmux"
+EOF
