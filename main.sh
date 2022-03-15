@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
 # ------------------------------------------------------------
 # -- Insert some optionally multiline text (third arg, 		--
