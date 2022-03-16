@@ -46,7 +46,7 @@ echo 'Script finished and installation is ready, run the following command to ac
 echo 'source ~/.bashrc'
 
 # Check whether this is a Red Hat system
-if [[ -f /etc/redhat-release ]]; then
+if [[ `id -u` -eq 0 && -f /etc/redhat-release ]]; then
 	echo 'Installing tmux...'
 	yum install -y tmux
 else
