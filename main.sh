@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -uo pipefail
 IFS=$'\n\t'
 
 # ------------------------------------------------------------
@@ -33,13 +33,13 @@ if [[ ! -d $bash_prompt_home ]]; then
 fi
 
 echo 'Including bash prompt in ~/.bashrc...'
-git_bash_rc_snippet=`cat <<- EOF
+read -r -d '' git_bash_rc_snippet <<- EOF
 	if [ -d "$bash_prompt_home" ]; then
 	    GIT_PROMPT_ONLY_IN_REPO=0
 	    source $bash_prompt_home/gitprompt.sh
 	fi
-.
-EOF`
+	.
+EOF
 insert_in_file_after_line ~/.bashrc '# User specific aliases and functions' "${git_bash_rc_snippet%.}"
 echo
 
@@ -48,7 +48,7 @@ if [[ `id -u` -eq 0 && -f /etc/redhat-release ]]; then
 	echo 'Installing tmux...'
 	yum install -y tmux
 else
-	echo "Tmux wasn't implicitly installed by this script, continuing...
+	echo "Tmux wasn't implicitly installed by this script, continuing..."
 fi
 
 tmux_powerline_theme_home=$target_git_clone_path/tmux_powerline
@@ -65,12 +65,12 @@ run-shell "$tmux_powerline_theme_home/tmux-power.tmux"
 EOF
 
 # Add code to ~/.bashrc for starting tmux automatically after ssh startup
-tmux_ssh_start_snippet=`cat <<- 'EOF'
+read -r -d '' tmux_ssh_start_snippet <<- 'EOF'
 if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
   tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
 fi
 .
-EOF`
+EOF
 
 insert_in_file_after_line ~/.bashrc '# User specific aliases and functions' "${tmux_ssh_start_snippet%.}"
 
