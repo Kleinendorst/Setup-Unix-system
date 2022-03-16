@@ -38,12 +38,10 @@ git_bash_rc_snippet=`cat <<- EOF
 	    GIT_PROMPT_ONLY_IN_REPO=0
 	    source $bash_prompt_home/gitprompt.sh
 	fi
+.
 EOF`
-insert_in_file_after_line ~/.bashrc '# User specific aliases and functions' "$git_bash_rc_snippet"
+insert_in_file_after_line ~/.bashrc '# User specific aliases and functions' "${git_bash_rc_snippet%.}"
 echo
-
-echo 'Script finished and installation is ready, run the following command to activate:'
-echo 'source ~/.bashrc'
 
 # Check whether this is a Red Hat system
 if [[ `id -u` -eq 0 && -f /etc/redhat-release ]]; then
@@ -66,3 +64,16 @@ cat > ~/.tmux.conf << EOF
 set -g @tmux_power_theme 'redwine'
 run-shell "$tmux_powerline_theme_home/tmux-power.tmux"
 EOF
+
+# Add code to ~/.bashrc for starting tmux automatically after ssh startup
+tmux_ssh_start_snippet=`cat <<- 'EOF'
+if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
+  tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
+fi
+.
+EOF`
+
+insert_in_file_after_line ~/.bashrc '# User specific aliases and functions' "${tmux_ssh_start_snippet%.}"
+
+echo 'Script finished and installation is ready, run the following command to activate:'
+echo 'source ~/.bashrc'
