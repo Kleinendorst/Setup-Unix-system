@@ -48,8 +48,7 @@ if [[ `id -u` -eq 0 && -f /etc/redhat-release ]]; then
 	echo 'Installing tmux...'
 	yum install -y tmux
 else
-	echo "Couldn\'t detect distribution, tmux might not be installed and this might be the cause"
-	echo "for failures in the script..."
+	echo "Tmux wasn't implicitly installed by this script, continuing...
 fi
 
 tmux_powerline_theme_home=$target_git_clone_path/tmux_powerline
