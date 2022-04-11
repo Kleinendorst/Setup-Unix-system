@@ -68,6 +68,8 @@ EOF
 read -r -d '' tmux_ssh_start_snippet <<- 'EOF'
 if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]]; then
   tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
+  # start tmux and exit ssh when tmux is closed or detached
+  exit 0
 fi
 .
 EOF
