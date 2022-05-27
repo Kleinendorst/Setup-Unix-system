@@ -1,7 +1,3 @@
-#!/bin/bash
-set -uo pipefail
-IFS=$'\n\t'
-
 # ------------------------------------------------------------
 # -- Insert some optionally multiline text (third arg, 		--
 # -- watch the quoting) into file (first arg) after			--
